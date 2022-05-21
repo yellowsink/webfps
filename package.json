@@ -1,0 +1,22 @@
+{
+  "name": "webfps",
+  "version": "1.0.0",
+  "description": "An FPS overlay for the browser",
+  "main": "dist/index.jsx",
+  "module": "dist/index.jsx",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:snippet": "vite build",
+    "prepublishOnly": "./build.sh"
+  },
+  "license": "Unlicense",
+  "devDependencies": {
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9",
+    "vite-plugin-solid": "^2.2.6"
+  },
+  "dependencies": {
+    "solid-js": "^1.4.2"
+  },
+  "type": "module"
+}
