@@ -16,7 +16,7 @@
     ],
     "isolatedModules": true,
     "noEmit": false,
-    "outDir": "dist",
+    "outDir": "tsdist",
     "declaration": true
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "webfps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An FPS overlay for the browser",
   "main": "dist/index.jsx",
   "module": "dist/index.jsx",
