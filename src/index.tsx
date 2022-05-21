@@ -6,7 +6,7 @@ import { createSignal } from "solid-js";
 
 export default () => {
   const overlay = document.createElement("div");
-  overlay.style.cssText = "position:absolute;left:0;top:0;z-index:9999";
+  overlay.style.cssText = "position:fixed;left:0;top:0;z-index:9999";
   document.body.appendChild(overlay);
 
   const [cancelPerf, setCancelPerf] = createSignal(false);
