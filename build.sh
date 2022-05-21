@@ -4,7 +4,9 @@ rm -rf dist
 npm exec tsc
 
 npm run build:snippet
-mv dist/assets/*.js tsdist/snippet.js
+echo "(()=>{" > tsdist/snippet.js
+cat dist/assets/*.js >> tsdist/snippet.js
+echo "})()" >> tsdist/snippet.js
 rm tsdist/snippet.d.ts
 rm -rf dist
 
