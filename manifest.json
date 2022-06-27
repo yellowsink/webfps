@@ -1,0 +1,16 @@
+{
+	"name": "WebFPS",
+	"description": "",
+	"version": "1.0.0",
+	"manifest_version": 3,
+	"devtools_page": "dist/index.html",
+	"permissions": ["scripting", "tabs"],
+	"host_permissions": ["*://*/*"],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["src/content.js"],
+			"run_at": "document_start"
+		}
+	]
+}
