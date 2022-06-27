@@ -1,23 +1,20 @@
 {
-  "name": "webfps",
-  "version": "1.2.0",
-  "description": "An FPS overlay for the browser",
-  "main": "dist/index.jsx",
-  "module": "dist/index.jsx",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build:snippet": "vite build",
-    "dev": "vite",
-    "prepublishOnly": "./build.sh"
-  },
-  "license": "Unlicense",
-  "devDependencies": {
-    "typescript": "^4.6.4",
-    "vite": "^2.9.9",
-    "vite-plugin-solid": "^2.2.6"
-  },
-  "dependencies": {
-    "solid-js": "^1.4.2"
-  },
-  "type": "module"
+	"name": "webfps",
+	"version": "1.2.0",
+	"description": "An FPS extension for the browser.",
+	"scripts": {
+		"dev-ui": "cd src/ui && npm run dev",
+		"dev-start": "web-ext run --target=chromium --chromium-binary=\"C:/Program Files/Vivaldi/Application/vivaldi.exe\""
+	},
+	"license": "Unlicense",
+	"devDependencies": {
+		"@types/chrome": "^0.0.191",
+		"typescript": "^4.6.4",
+		"vite": "^2.9.9",
+		"vite-plugin-solid": "^2.2.6"
+	},
+	"dependencies": {
+		"solid-js": "^1.4.2"
+	},
+	"type": "module"
 }

@@ -1,0 +1,9 @@
+{
+	"name": "webfps-ui",
+	"version": "0.0.0",
+	"description": "",
+	"scripts": {
+		"dev": "vite build -w"
+	},
+	"license": "Unlicense"
+}
