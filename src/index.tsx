@@ -6,11 +6,8 @@ import { createEffect, createSignal } from "solid-js";
 
 export default () => {
   const shadowHost = (<div />) as HTMLDivElement;
-  //const shadowRoot = shadowHost.attachShadow({ mode: "closed" });
-  //document.body.appendChild(shadowHost);
-
-  // temp since solid fails to attach event handler
-  const shadowRoot = document.body;
+  const shadowRoot = shadowHost.attachShadow({ mode: "open" });
+  document.body.appendChild(shadowHost);
 
   const [pos, setPos] = createSignal<[number, number]>([0, 0]);
 
@@ -39,8 +36,7 @@ export default () => {
   createEffect(() => {
     if (cancelPerf()) {
       unmount();
-      //shadowHost.remove();
-      overlay.remove();
+      shadowHost.remove();
     }
   });
 

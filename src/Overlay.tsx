@@ -35,13 +35,14 @@ const Overlay: Component<{
         display: "grid",
         "grid-template-columns": "auto 1fr",
         gap: ".25rem",
+        "column-gap": ".5rem",
         position: "relative",
       }}
     >
       <div style="position:absolute;top:5px;right:5px;display:flex;gap:.5rem;pointer-events:all">
         <div
           style={{
-            width: "2rem",
+            width: "1.5rem",
             background:
               "repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 2px 2px",
             cursor: dragOffset() ? "grabbing" : "grab",
@@ -53,7 +54,7 @@ const Overlay: Component<{
         />
 
         <button
-          style="background:none;color:white;grid-column:1/3"
+          style="background:none;color:white;border:none"
           onclick={() => props.setC(true)}
         >
           X
