@@ -1,31 +1,48 @@
 /* @refresh reload */
-import {render} from "solid-js/web";
+import { render } from "solid-js/web";
 
 import Overlay from "./Overlay";
-import {createEffect, createSignal} from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 
 export default () => {
-	const overlay = document.createElement("div");
-	overlay.style.cssText = "position:fixed;left:0;top:0;z-index:9999;pointer-events:none";
-	document.body.appendChild(overlay);
+  const shadowHost = (<div />) as HTMLDivElement;
+  //const shadowRoot = shadowHost.attachShadow({ mode: "closed" });
+  //document.body.appendChild(shadowHost);
 
-	const [cancelPerf, setCancelPerf] = createSignal(false);
+  // temp since solid fails to attach event handler
+  const shadowRoot = document.body;
 
-	const unmount = render(
-		() => <Overlay c={cancelPerf()} setC={setCancelPerf}/>,
-		overlay
-	);
+  const [pos, setPos] = createSignal<[number, number]>([0, 0]);
 
-	createEffect(() => {
-		if (cancelPerf()) {
-			unmount();
-			overlay.remove();
-		}
-	});
+  const overlay = (
+    <div
+      style={{
+        position: "fixed",
+        left: pos()[0] + "px",
+        top: pos()[1] + "px",
+        "z-index": 9999,
+        "pointer-events": "none"
+      }}
+    />
+  ) as HTMLDivElement;
+  shadowRoot.appendChild(overlay);
 
-	return () => {
-		unmount();
-		overlay.remove();
-		setCancelPerf(true);
-	};
+  const [cancelPerf, setCancelPerf] = createSignal(false);
+
+  const unmount = render(
+    () => (
+      <Overlay c={cancelPerf()} setC={setCancelPerf} p={pos()} setP={setPos} />
+    ),
+    overlay
+  );
+
+  createEffect(() => {
+    if (cancelPerf()) {
+      unmount();
+      //shadowHost.remove();
+      overlay.remove();
+    }
+  });
+
+  return () => setCancelPerf(true);
 };
