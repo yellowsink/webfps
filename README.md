@@ -38,3 +38,7 @@ when the page is rendering at 10fps!
 - webber framer per seconder
 
   -- Lith
+  
+- chrome frame second count
+
+  -- Phorcys
