@@ -1,17 +1,14 @@
-import type { Accessor } from "solid-js";
-import { createEffect, createSignal } from "solid-js";
-
 export interface Perf {
   /** Last frame time */
-  time: Accessor<number>;
+  time: number;
   /** Last FPS */
-  fps: Accessor<number>;
+  fps: number;
   /** Mean Last 50 FPS */
-  mean: Accessor<number>;
+  mean: number;
   /** Raw last 100 frame times */
-  raw: Accessor<number[]>;
+  raw: number[];
   /** Are frames suspicious */
-  sus: Accessor<boolean>;
+  sus: boolean;
 }
 
 const mean50 = (values: number[]) =>
@@ -24,36 +21,37 @@ function pad<T>(values: (T | undefined)[], minLen: number) {
   return values;
 }
 
-const msToFps = (val: number) => 1 / (val / 1000);
+const msToFps = (val: undefined | number) => !val ? 0 : 1 / (val / 1000);
 
-export default (cancel: Accessor<boolean>): Perf => {
-  const [frameTimes, setFrameTimes] = createSignal([] as number[]);
+export default (receiver: (p: Perf) => void) => {
+  const frameTimes: number[] = [];
 
-  const lastFTime = () => frameTimes()[frameTimes().length - 1];
+  const lastFTime = () => frameTimes[frameTimes.length - 1];
 
   let lastTimestamp = performance.now();
+  let isCancelled = false;
   const tick = (stamp: DOMHighResTimeStamp) => {
     const diff = stamp - lastTimestamp;
 
-    const times = frameTimes();
-    times.push(diff);
-    setFrameTimes(times.slice(-100));
+    if (frameTimes.length === 100) frameTimes.shift();
+    frameTimes.push(diff);
 
     lastTimestamp = stamp;
 
-    if (!cancel()) requestAnimationFrame(tick);
+    receiver({
+      time: lastFTime(),
+      fps: msToFps(lastFTime()),
+      mean: msToFps(mean50(frameTimes)),
+      raw: pad(frameTimes, 100),
+      sus: frameTimes.some(v => v === 0),
+    });
+
+    if (!isCancelled) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 
-  // frames are suspicious if any times are 0
-  const [isSus, setIsSus] = createSignal(false);
-  createEffect(() => setIsSus(frameTimes().some((v) => v === 0)));
 
-  return {
-    time: lastFTime,
-    fps: () => msToFps(lastFTime()),
-    mean: () => mean50(frameTimes().map(msToFps)),
-    raw: () => pad(frameTimes(), 100),
-    sus: isSus,
+  return () => {
+    isCancelled = true;
   };
 };

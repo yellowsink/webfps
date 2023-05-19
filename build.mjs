@@ -22,7 +22,7 @@ await build({
 	...commonOpts,
 	entryPoints: ["src/index.tsx"],
 	outfile: "dist/index.js",
-	format: "esm",
+	format: "esm"
 })
 
 await build({

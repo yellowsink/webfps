@@ -1,29 +1,41 @@
-import type { Component, Setter } from "solid-js";
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import usePerf from "./usePerf";
+import {Perf} from "./usePerf";
 import Chart from "./Chart";
 
-const Overlay: Component<{
-  c: boolean;
-  setC: Setter<boolean>;
-  p: [number, number];
-  setP: Setter<[number, number]>;
-}> = (props) => {
-  const perf = usePerf(() => props.c);
+export default (causeCancel: () => void, pos: [number, number], setPos: (v: [number, number]) => void) => {
+  let dragAreaDiv: HTMLDivElement;
+  let timeSpan: HTMLSpanElement;
+  let fpsSpan: HTMLSpanElement;
+  let meanSpan: HTMLSpanElement;
+  let susDiv: HTMLDivElement;
 
-  const [dragOffset, setDragOffset] = createSignal<
-    [number, number] | undefined
-  >();
+  let dragOffset: [number, number];
 
   const mmHandler = (ev) => {
-    if (dragOffset())
-      props.setP([ev.clientX - dragOffset()[0], ev.clientY - dragOffset()[1]]);
+    if (dragOffset) {
+      setPos([ev.clientX - dragOffset[0], ev.clientY - dragOffset[1]]);
+    }
   };
 
-  onMount(() => window.addEventListener("mousemove", mmHandler));
-  onCleanup(() => window.removeEventListener("mousemove", mmHandler));
+  window.addEventListener("mousemove", mmHandler);
 
-  return (
+  const onCancel = () => {
+    window.removeEventListener("mousemove", mmHandler)
+  }
+
+  const [updateChart, chart] = Chart();
+
+  const onData = (data: Perf) => {
+    updateChart(data.raw);
+    timeSpan.textContent = data.time.toPrecision(4);
+    fpsSpan.textContent = data.fps.toPrecision(4);
+    meanSpan.textContent = data.mean.toPrecision(4);
+    susDiv.style.display = data.sus ? "" : "none";
+  }
+
+  return [
+    onCancel,
+    onData,
+    (
     <div
       style={{
         background: "#000c",
@@ -41,46 +53,48 @@ const Overlay: Component<{
     >
       <div style="position:absolute;top:5px;right:5px;display:flex;gap:.5rem;pointer-events:all">
         <div
+          ref={dragAreaDiv}
           style={{
             width: "1.5rem",
             background:
               "repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 2px 2px",
-            cursor: dragOffset() ? "grabbing" : "grab",
+            cursor: "grab",
           }}
-          onmousedown={(ev) =>
-            setDragOffset([ev.clientX - props.p[0], ev.clientY - props.p[1]])
-          }
-          onmouseup={() => setDragOffset()}
+          onmousedown={(ev) => {
+            dragOffset = [ev.clientX - pos[0], ev.clientY - pos[1]];
+            dragAreaDiv.style.cursor = "grabbing";
+          }}
+          onmouseup={() => {
+            dragOffset = undefined;
+            dragAreaDiv.style.cursor = "grab";
+          }}
         />
 
         <button
           style="background:none;color:white;border:none"
-          onclick={() => props.setC(true)}
+          onclick={causeCancel}
         >
           X
         </button>
       </div>
 
-      <Show when={perf.sus()}>
-        <div style="grid-column:1/3">
-          Frame times are suspicious
-          <br />
-          If on Firefox, ensure privacy.resistFingerprinting is off
-        </div>
-      </Show>
+      <div ref={susDiv} style="display:none;grid-column:1/3">
+        Frame times are suspicious
+        <br />
+        If on Firefox, ensure privacy.resistFingerprinting is off
+      </div>
 
       <span>FTime:</span>
-      <span>{perf.time()?.toPrecision(4)}ms</span>
+      <span><span ref={timeSpan} />ms</span>
       <span>Current:</span>
-      <span>{perf.fps()?.toPrecision(4)}fps</span>
+      <span><span ref={fpsSpan} />fps</span>
       <span>Last 50 mean:</span>
-      <span>{perf.mean()?.toPrecision(4)}fps</span>
+      <span><span ref={meanSpan} />fps</span>
 
       <div style="grid-column:1/3">
         Frame time graph:
-        <Chart data={perf.raw()} />
+        {chart}
       </div>
-    </div>
-  );
+    </div> as HTMLDivElement
+  )] as const;
 };
-export default Overlay;

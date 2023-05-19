@@ -1,9 +1,9 @@
 {
   "name": "webfps",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "An FPS overlay for the browser",
-  "main": "dist/index.jsx",
-  "module": "dist/index.jsx",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "tsc && node build.mjs"

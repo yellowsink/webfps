@@ -1,5 +1,3 @@
-import { Component, createEffect, createSignal } from "solid-js";
-
 const height = 100;
 const width = 200;
 
@@ -8,15 +6,13 @@ const calcMax = (vals: number[]) =>
 const calcMin = (vals: number[]) =>
   vals.reduce((p, c) => Math.min(p ?? 0, c ?? 0));
 
-const Chart: Component<{ data: number[] }> = (props) => {
+export default () => {
   let canvas: HTMLCanvasElement;
 
-  const [min, setMin] = createSignal(0);
-  const [max, setMax] = createSignal(0);
+  let minSpan: HTMLSpanElement;
+  let maxSpan: HTMLSpanElement;
 
-  createEffect(() => {
-    const data = props.data;
-
+  const update = ((data: number[]) => {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 200, 100);
     ctx.beginPath();
@@ -36,23 +32,21 @@ const Chart: Component<{ data: number[] }> = (props) => {
     ctx.strokeStyle = "white";
     ctx.stroke();
 
-    setMin(dataMin);
-    setMax(dataMax);
+    minSpan.innerText = dataMin.toFixed(2);
+    maxSpan.innerText = dataMax.toFixed(2);
   });
 
   // noinspection JSUnusedAssignment - the ref={canvas}
-  return (
+  return [update, (
     <div style="display:grid;justify-items:right">
-      {max().toFixed(2)}ms
-      <span style="align-self:end">{min().toFixed(2)}ms</span>
+      <span><span ref={maxSpan} />ms</span>
+      <span style="align-self:end"><span ref={minSpan} />ms</span>
       <canvas
         style="grid-area:1/2/3/3"
         ref={canvas}
         width={width}
         height={height}
       />
-    </div>
-  );
+    </div> as HTMLDivElement
+  )] as const;
 };
-
-export default Chart;
