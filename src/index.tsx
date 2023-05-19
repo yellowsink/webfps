@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { render } from "solid-js/web";
+import { render } from "dom-expressions/src/client";
 
 import Overlay from "./Overlay";
 import { createEffect, createSignal } from "solid-js";
