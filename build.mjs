@@ -2,21 +2,7 @@ import {build} from "esbuild";
 import pluginBabel from "esbuild-plugin-babel";
 
 /** @type import('esbuild').BuildOptions */
-const commonOpts = {
-	bundle: true,
-	plugins: [
-		pluginBabel({
-			filter: /.*/,
-			namespace: '',
-			config: {
-				presets: ["@babel/preset-typescript"],
-				plugins: [
-					["babel-plugin-jsx-dom-expressions", {moduleName: "dom-expressions/src/client"}]
-				]
-			}
-		})
-	]
-};
+const commonOpts = { bundle: true };
 
 await build({
 	...commonOpts,

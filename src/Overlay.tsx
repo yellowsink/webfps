@@ -1,5 +1,6 @@
 import {Perf} from "./usePerf";
 import Chart from "./Chart";
+import {ev, html} from "./iota";
 
 export default (causeCancel: () => void, pos: [number, number], setPos: (v: [number, number]) => void) => {
   let dragAreaDiv: HTMLDivElement;
@@ -36,21 +37,11 @@ export default (causeCancel: () => void, pos: [number, number], setPos: (v: [num
     onCancel,
     onData,
     (
-    <div
-      style={{
-        background: "#000c",
-        margin: ".5rem",
-        padding: ".5rem",
-        width: "max-content",
-        color: "#fff",
-        "font-family": "monospace",
-        display: "grid",
-        "grid-template-columns": "auto 1fr",
-        gap: ".25rem",
-        "column-gap": ".5rem",
-        position: "relative",
-      }}
-    >
+      html`
+    <div style="background: #000c; color: #fff; font-family: monospace;
+        margin: .5rem; padding: .5rem; width: max-content; gap: .25rem .5rem;
+        display: grid; grid-template-columns: auto 1fr; position: relative
+        ">
       <div style="position:absolute;top:5px;right:5px;display:flex;gap:.5rem;pointer-events:all">
         <div
           ref={dragAreaDiv}
@@ -70,12 +61,11 @@ export default (causeCancel: () => void, pos: [number, number], setPos: (v: [num
           }}
         />
 
-        <button
-          style="background:none;color:white;border:none"
-          onclick={causeCancel}
-        >
-          X
-        </button>
+        ${ev(
+          html`<button style="background:none;color:white;border:none">X</button>`, 
+          "onclick",
+          causeCancel)
+        }
       </div>
 
       <div ref={susDiv} style="display:none;grid-column:1/3">
@@ -95,6 +85,6 @@ export default (causeCancel: () => void, pos: [number, number], setPos: (v: [num
         Frame time graph:
         {chart}
       </div>
-    </div> as HTMLDivElement
+    </div>`[0] as HTMLDivElement
   )] as const;
 };

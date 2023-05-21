@@ -1,5 +1,4 @@
-const height = 100;
-const width = 200;
+import { html } from "./iota";
 
 const calcMax = (vals: number[]) =>
   vals.reduce((p, c) => Math.max(p ?? 0, c ?? 0));
@@ -12,7 +11,7 @@ export default () => {
   let minSpan: HTMLSpanElement;
   let maxSpan: HTMLSpanElement;
 
-  const update = ((data: number[]) => {
+  const update = (data: number[]) => {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 200, 100);
     ctx.beginPath();
@@ -24,9 +23,9 @@ export default () => {
       const floor = dataMax - dataMin;
 
       const multiplier = (data[i] - ceil) / floor;
-      const pointHeight = (1 - multiplier) * height;
+      const pointHeight = (1 - multiplier) * 100;
 
-      const pointWidth = (width / data.length) * i;
+      const pointWidth = (200 / data.length) * i;
       ctx.lineTo(pointWidth, pointHeight);
     }
     ctx.strokeStyle = "white";
@@ -34,19 +33,21 @@ export default () => {
 
     minSpan.innerText = dataMin.toFixed(2);
     maxSpan.innerText = dataMax.toFixed(2);
-  });
+  };
 
-  // noinspection JSUnusedAssignment - the ref={canvas}
-  return [update, (
-    <div style="display:grid;justify-items:right">
-      <span><span ref={maxSpan} />ms</span>
-      <span style="align-self:end"><span ref={minSpan} />ms</span>
-      <canvas
+  return [
+    update,
+    html<HTMLDivElement>`<div style="display:grid;justify-items:right">
+      <span>${(maxSpan = html`<span />`)}ms</span>
+      <span style="align-self:end">
+        ${(minSpan = html`<span />`)}ms
+      </span>
+
+      ${(canvas = html` <canvas
         style="grid-area:1/2/3/3"
-        ref={canvas}
-        width={width}
-        height={height}
-      />
-    </div> as HTMLDivElement
-  )] as const;
+        width="200"
+        height="100"
+      />`)}
+    </div>`,
+  ] as const;
 };
