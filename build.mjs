@@ -1,12 +1,11 @@
 import {build} from "esbuild";
-import pluginBabel from "esbuild-plugin-babel";
 
 /** @type import('esbuild').BuildOptions */
 const commonOpts = { bundle: true };
 
 await build({
 	...commonOpts,
-	entryPoints: ["src/index.tsx"],
+	entryPoints: ["src/index.ts"],
 	outfile: "dist/index.js",
 	format: "esm"
 })

@@ -41,11 +41,13 @@ export function html<T extends Node = ChildNode>(
         const unwrapped = typeof val === "function" ? val() : val;
         const nodes = Array.isArray(unwrapped) ? unwrapped : [unwrapped];
 
-        prev = nodes.filter(n => n != null && (typeof n === "string" ? n.trim() : true)).map((v) =>
-          v instanceof Node ? v : document.createTextNode(v as any)
-        );
+        prev = nodes
+          .filter((n) => n != null && (typeof n === "string" ? n.trim() : true))
+          .map((v) =>
+            v instanceof Node ? v : document.createTextNode(v as any)
+          );
 
-        prev[0] ??= document.createTextNode('');
+        prev[0] ??= document.createTextNode("");
 
         prev.forEach((n) => last.parentNode?.insertBefore(n, last));
         last.parentNode?.removeChild(last);
@@ -58,7 +60,9 @@ export function html<T extends Node = ChildNode>(
 
   // i think multiple elems is unnecessary generally
   //return [...root.childNodes] as any as T[];
-  return ([...root.childNodes].find(n => !(n instanceof Text) || n.textContent.trim()) ?? root.firstChild) as any as T;
+  return ([...root.childNodes].find(
+    (n) => !(n instanceof Text) || n.textContent.trim()
+  ) ?? root.firstChild) as any as T;
 }
 
 export function ev<T extends Node>(

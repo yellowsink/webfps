@@ -1,7 +1,8 @@
-import {attrs, effect, html, sig, Sig} from "./iota";
-import {Perf} from "./usePerf";
+import { attrs, effect, html, sig, Sig } from "./iota";
+import { Perf } from "./usePerf";
 
-const WIDTH = 200, HEIGHT = 100;
+const WIDTH = 200,
+  HEIGHT = 100;
 
 const calcMax = (vals: number[]) =>
   vals.reduce((p, c) => Math.max(p ?? 0, c ?? 0));
@@ -41,18 +42,16 @@ export default (perf: Sig<Perf>) => {
     maxSig(dataMax);
   });
 
-  return html<HTMLDivElement>`
-    <div style="display:grid;justify-items:right">
-      ${() => maxSig().toFixed(2)}ms
-      <span style="align-self:end">
-        ${() => minSig().toFixed(2)}ms
-      </span>
+  return html<HTMLDivElement>`<div style="display:grid;justify-items:right">
+    ${() => maxSig().toFixed(2)}ms
+    <span style="align-self:end"> ${() => minSig().toFixed(2)}ms </span>
 
-      ${(canvas = attrs(
-        html`<canvas style="grid-area:1/2/3/3 "/>`,
-        "width",
-        WIDTH, 
-        "height",
-        HEIGHT))}
-    </div>`
+    ${(canvas = attrs(
+      html`<canvas style="grid-area:1/2/3/3 " />`,
+      "width",
+      WIDTH,
+      "height",
+      HEIGHT
+    ))}
+  </div>`;
 };

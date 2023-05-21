@@ -1,21 +1,13 @@
 {
   "include": [
-    "src/*.ts",
-    "src/*.tsx"
+    "src/*.ts"
   ],
   "compilerOptions": {
     "target": "ESNext",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
     "isolatedModules": true,
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "dist",
-    "paths": {
-      "rxcore": ["./src/rxcore.js"]
-    }
   }
 }

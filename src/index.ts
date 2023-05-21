@@ -3,7 +3,7 @@ import usePerf from "./usePerf";
 import { effect, html, sig } from "./iota";
 
 export default () => {
-  const shadowHost = html<HTMLDivElement>`<div/>`;
+  const shadowHost = html<HTMLDivElement>`<div />`;
   const shadowRoot = shadowHost.attachShadow({ mode: "open" });
   document.body.append(shadowHost);
 
@@ -11,10 +11,11 @@ export default () => {
   const cancelSig = sig(false);
   const perfSig = usePerf(cancelSig);
 
-  const overlay: HTMLDivElement =
-    html`<div style="position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none">
-      ${Overlay(cancelSig, pos, perfSig)}
-    </div>`;
+  const overlay: HTMLDivElement = html`<div
+    style="position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none"
+  >
+    ${Overlay(cancelSig, pos, perfSig)}
+  </div>`;
 
   shadowRoot.append(overlay);
 

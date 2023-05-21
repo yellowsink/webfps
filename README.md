@@ -2,6 +2,10 @@
 
 Yeah you do the thing and the overlay the thing
 
+```js
+import("https://esm.sh/webfps/dist/snippet");
+```
+
 ## Does it work thoe
 Yeah it does, go [here](https://greensock.com) and paste the snippet in devtools.
 
