@@ -1,38 +1,31 @@
 import Overlay from "./Overlay";
 import usePerf from "./usePerf";
-import { html } from "./iota";
+import { effect, html, sig } from "./iota";
 
 export default () => {
-  const shadowHost = (<div />) as HTMLDivElement;
+  const shadowHost = html<HTMLDivElement>`<div/>`;
   const shadowRoot = shadowHost.attachShadow({ mode: "open" });
   document.body.append(shadowHost);
 
-  const pos: [number, number] = [0, 0];
+  const pos = sig<[number, number]>([0, 0]);
+  const cancelSig = sig(false);
+  const perfSig = usePerf(cancelSig);
 
   const overlay: HTMLDivElement =
-    html`<div style="position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none" />`;
+    html`<div style="position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none">
+      ${Overlay(cancelSig, pos, perfSig)}
+    </div>`;
 
   shadowRoot.append(overlay);
 
-  let cancelOlay;
-  let cancelPerf;
-  const causeCancel = () => {
-    shadowHost.remove();
-    cancelOlay?.();
-    cancelPerf?.();
-  };
-
-  const [onCancel, onData, elem] = Overlay(causeCancel, pos, ([x, y]) => {
-    pos[0] = x;
-    pos[1] = y;
-    overlay.style.left = x + "px";
-    overlay.style.top = y + "px";
+  effect(() => {
+    overlay.style.left = pos()[0] + "px";
+    overlay.style.top = pos()[1] + "px";
   });
-  cancelOlay = onCancel;
 
-  cancelPerf = usePerf(onData);
+  effect(() => cancelSig() && shadowHost.remove());
 
-  overlay.append(elem);
-
-  return causeCancel;
+  return () => {
+    cancelSig(false);
+  };
 };

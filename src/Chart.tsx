@@ -1,17 +1,23 @@
-import { html } from "./iota";
+import {attrs, effect, html, sig, Sig} from "./iota";
+import {Perf} from "./usePerf";
+
+const WIDTH = 200, HEIGHT = 100;
 
 const calcMax = (vals: number[]) =>
   vals.reduce((p, c) => Math.max(p ?? 0, c ?? 0));
 const calcMin = (vals: number[]) =>
   vals.reduce((p, c) => Math.min(p ?? 0, c ?? 0));
 
-export default () => {
+export default (perf: Sig<Perf>) => {
   let canvas: HTMLCanvasElement;
 
-  let minSpan: HTMLSpanElement;
-  let maxSpan: HTMLSpanElement;
+  const minSig = sig(0);
+  const maxSig = sig(0);
 
-  const update = (data: number[]) => {
+  effect(() => {
+    const data = perf().raw;
+    if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 200, 100);
     ctx.beginPath();
@@ -23,31 +29,30 @@ export default () => {
       const floor = dataMax - dataMin;
 
       const multiplier = (data[i] - ceil) / floor;
-      const pointHeight = (1 - multiplier) * 100;
+      const pointHeight = (1 - multiplier) * HEIGHT;
 
-      const pointWidth = (200 / data.length) * i;
+      const pointWidth = (WIDTH / data.length) * i;
       ctx.lineTo(pointWidth, pointHeight);
     }
     ctx.strokeStyle = "white";
     ctx.stroke();
 
-    minSpan.innerText = dataMin.toFixed(2);
-    maxSpan.innerText = dataMax.toFixed(2);
-  };
+    minSig(dataMin);
+    maxSig(dataMax);
+  });
 
-  return [
-    update,
-    html<HTMLDivElement>`<div style="display:grid;justify-items:right">
-      <span>${(maxSpan = html`<span />`)}ms</span>
+  return html<HTMLDivElement>`
+    <div style="display:grid;justify-items:right">
+      ${() => maxSig().toFixed(2)}ms
       <span style="align-self:end">
-        ${(minSpan = html`<span />`)}ms
+        ${() => minSig().toFixed(2)}ms
       </span>
 
-      ${(canvas = html` <canvas
-        style="grid-area:1/2/3/3"
-        width="200"
-        height="100"
-      />`)}
-    </div>`,
-  ] as const;
+      ${(canvas = attrs(
+        html`<canvas style="grid-area:1/2/3/3 "/>`,
+        "width",
+        WIDTH, 
+        "height",
+        HEIGHT))}
+    </div>`
 };

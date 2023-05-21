@@ -1,11 +1,13 @@
+export type Sig<T> = (newVal?: T) => T;
+
 let effectStack: (() => void)[] = [];
 
-export function sig<T>(val: T) {
+export function sig<T>(val?: T): Sig<T> {
   const subs = new Set<() => void>();
 
-  return (newVal?: T) => {
-    if (newVal) {
-      val = newVal;
+  return (...nv: [T]) => {
+    if (nv.length) {
+      val = nv[0];
       subs.forEach((e) => e());
     } else if (effectStack.length) {
       subs.add(effectStack[effectStack.length - 1]);

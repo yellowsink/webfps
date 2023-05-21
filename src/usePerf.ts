@@ -1,3 +1,5 @@
+import { Sig, sig } from "./iota";
+
 export interface Perf {
   /** Last frame time */
   time: number;
@@ -21,37 +23,37 @@ function pad<T>(values: (T | undefined)[], minLen: number) {
   return values;
 }
 
-const msToFps = (val: undefined | number) => !val ? 0 : 1 / (val / 1000);
+const msToFps = (val: undefined | number) => (!val ? 0 : 1 / (val / 1000));
 
-export default (receiver: (p: Perf) => void) => {
+export default (cancelSig: Sig<boolean>) => {
   const frameTimes: number[] = [];
 
-  const lastFTime = () => frameTimes[frameTimes.length - 1];
+  const stats = sig<Perf>({
+    time: 0,
+    fps: 0,
+    mean: 0,
+    raw: pad([], 100),
+    sus: false,
+  });
 
   let lastTimestamp = performance.now();
-  let isCancelled = false;
   const tick = (stamp: DOMHighResTimeStamp) => {
-    const diff = stamp - lastTimestamp;
-
     if (frameTimes.length === 100) frameTimes.shift();
-    frameTimes.push(diff);
+    frameTimes.push(stamp - lastTimestamp);
 
     lastTimestamp = stamp;
 
-    receiver({
-      time: lastFTime(),
-      fps: msToFps(lastFTime()),
+    stats({
+      time: frameTimes[frameTimes.length - 1],
+      fps: msToFps(frameTimes[frameTimes.length - 1]),
       mean: msToFps(mean50(frameTimes)),
       raw: pad(frameTimes, 100),
-      sus: frameTimes.some(v => v === 0),
+      sus: frameTimes.some((v) => v === 0),
     });
 
-    if (!isCancelled) requestAnimationFrame(tick);
+    if (!cancelSig()) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 
-
-  return () => {
-    isCancelled = true;
-  };
+  return () => stats();
 };
