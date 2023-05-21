@@ -37,7 +37,8 @@ export default (cancelSig: Sig<boolean>) => {
   });
 
   let lastTimestamp = performance.now();
-  const tick = (stamp: DOMHighResTimeStamp) => {
+  const tick = () => {
+    const stamp = performance.now();
     if (frameTimes.length === 100) frameTimes.shift();
     frameTimes.push(stamp - lastTimestamp);
 
