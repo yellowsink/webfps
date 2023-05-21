@@ -46,7 +46,7 @@ export default (
         html`<button style="background:none;color:white;border:none">
           X
         </button>`,
-        "onclick",
+        "click",
         () => cancelSig(true)
       )}
     </div>

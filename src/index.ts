@@ -27,6 +27,6 @@ export default () => {
   effect(() => cancelSig() && shadowHost.remove());
 
   return () => {
-    cancelSig(false);
+    cancelSig(true);
   };
 };
