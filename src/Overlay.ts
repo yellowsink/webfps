@@ -1,6 +1,6 @@
 import { Perf } from "./usePerf";
 import Chart from "./Chart";
-import { attrs, effect, ev, html, sig, Sig } from "./iota";
+import { attrs, effect, ev, html, sig, Sig } from "@uwu/iota";
 
 export default (
   cancelSig: Sig<boolean>,

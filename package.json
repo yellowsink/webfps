@@ -1,6 +1,6 @@
 {
   "name": "webfps",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "An FPS overlay for the browser",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -13,5 +13,8 @@
     "esbuild": "^0.17.19",
     "typescript": "^4.7.4"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@uwu/iota": "^1.0.2"
+  }
 }

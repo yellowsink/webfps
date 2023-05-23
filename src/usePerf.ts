@@ -1,4 +1,4 @@
-import { Sig, sig } from "./iota";
+import { Sig, sig } from "@uwu/iota";
 
 export interface Perf {
   /** Last frame time */

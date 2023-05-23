@@ -1,6 +1,6 @@
 import Overlay from "./Overlay";
 import usePerf from "./usePerf";
-import { effect, html, sig } from "./iota";
+import { effect, html, sig } from "@uwu/iota";
 
 export default () => {
   const shadowHost = html<HTMLDivElement>`<div />`;

@@ -1,5 +1,10 @@
 lockfileVersion: '6.0'
 
+dependencies:
+  '@uwu/iota':
+    specifier: ^1.0.2
+    version: 1.0.2
+
 devDependencies:
   esbuild:
     specifier: ^0.17.19
@@ -207,6 +212,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@uwu/iota@1.0.2:
+    resolution: {integrity: sha512-f0/hRF06oEGmrRtZv+Vog1rMiaXok92i+KPHtHY1atro0/jRKzO9O6APQbqLWhzJvosB9Hqjnp0VOsfWW/W4zQ==}
+    dev: false
 
   /esbuild@0.17.19:
     resolution: {integrity: sha512-XQ0jAPFkK/u3LcVRcvVHQcTIqD6E2H1fvZMA5dQPSOWb3suUbWbfbRf94pjc0bNzRYLfIrDRQXr7X+LHIm5oHw==}

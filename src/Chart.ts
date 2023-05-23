@@ -1,4 +1,4 @@
-import { attrs, effect, html, sig, Sig } from "./iota";
+import { attrs, effect, html, sig, Sig } from "@uwu/iota";
 import { Perf } from "./usePerf";
 
 const WIDTH = 200,
