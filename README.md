@@ -46,3 +46,11 @@ when the page is rendering at 10fps!
 - chrome frame second count
 
   -- Phorcys
+
+- very speed of frames
+
+  -- mugman
+
+- 20 fram e
+
+  -- 20
